@@ -2,7 +2,7 @@ LATEX      = pdflatex
 LATEXFLAGS = -interaction=nonstopmode -halt-on-error -output-directory=../build
 
 # Main contest TeX file
-CONTEST = ../contests/*
+CONTEST = ../contests/contest1.tex
 PROBLEMS =  ../problems/*
 
 
@@ -24,7 +24,7 @@ $(PROBLEMS):
 
 
 # Rule: build the main contest PDF
-%.pdf: ../contests/%.tex  $(call deps,../contests/%.tex)
+%.pdf: ../contests  $(call deps,$(CONTEST))
 	@echo "Dependencies for $(CONTEST):"
 	@echo "$(call deps,$(CONTEST))"
 	@echo "Raw dependencies:"
