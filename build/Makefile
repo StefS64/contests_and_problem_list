@@ -16,8 +16,8 @@ WRAPPERS = $(patsubst ../problems/%.tex,wrapped/%.tex,$(PROBLEM_TXS))
 # Produces a list of ../problems/<path>.tex (adds .tex if missing)
 define deps
 $(shell grep -o '\\includeProblem{[^}]*}' $1 | \
-       sed -E 's/\\includeProblem\{([^}]*)\}/\1/' | \
-       sed -E 's|^|../problems/|' | sed -E '/\.tex$$/! s|$$|.tex|')
+	   sed -E 's/\\includeProblem\{([^}]*)\}/\1/' | \
+	   sed -E 's|^|../problems/|' | sed -E '/\.tex$$/! s|$$|.tex|')
 endef
 
 
@@ -35,11 +35,11 @@ build/problem-usage.txt: $(PROBLEM_TXS)
 	  base=$$(basename "$$rel_noext"); \
 	  echo -n "$$rel:" >> $@; \
 	  usages=$$( (grep -rlF "\\includeProblem{$$rel}" ../contests || true; \
-                  grep -rlF "\\includeProblem{$$rel_noext}" ../contests || true; \
-                  grep -rlE "\\\\includeProblem\\{([^}]*/)?$$base(\\.tex)?\\}" ../contests || true) | sort -u ); \
+				  grep -rlF "\\includeProblem{$$rel_noext}" ../contests || true; \
+				  grep -rlE "\\\\includeProblem\\{([^}]*/)?$$base(\\.tex)?\\}" ../contests || true) | sort -u ); \
 	  if [ -z "$$usages" ]; then echo " (not used)" >> $@; \
 	  else echo >> $@; \
-	       for u in $$usages; do echo "  - $$u" >> $@; done; \
+		   for u in $$usages; do echo "  - $$u" >> $@; done; \
 	  fi; \
 	done
 
@@ -55,15 +55,16 @@ wrapped/%.tex: ../problems/%.tex
 	@rel="$*"; \
 	base=$$(basename "$$rel" .tex); \
 	cnts=$$( { \
-      grep -rlF "\\\\includeProblem{$$rel}.tex" ../contests || true; \
-      grep -rlF "\\\\includeProblem{$$rel}" ../contests || true; \
-      grep -rlE "\\\\includeProblem\\{([^}]*/)?$$base(\\.tex)?\\}" ../contests || true; \
-    } | sort -u ); \
+	  grep -rlF "\\\\includeProblem{$$rel}.tex" ../contests || true; \
+	  grep -rlF "\\\\includeProblem{$$rel}" ../contests || true; \
+	  grep -rlE "\\\\includeProblem\\{([^}]*/)?$$base(\\.tex)?\\}" ../contests || true; \
+	} | sort -u ); \
 	if [ -z "$$cnts" ]; then \
 	  printf '  \\item (not used in any contest)\n' >> $@; \
 	else \
 	  for c in $$cnts; do \
-	    printf '  \\item %s\n' "$$c" >> $@; \
+		esc_c=$$(echo "$$c" | sed 's/_/\\\_/g'); \
+		printf '  \\item %s\n' "$$esc_c" >> $@; \
 	  done; \
 	fi
 	@printf '\\end{itemize}\n\\end{document}\n' >> $@

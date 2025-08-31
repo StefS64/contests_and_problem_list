@@ -20,6 +20,22 @@ How problems are included
 
 - `utils/helpers.tex` defines `\includeProblem` to `\input{../problems/#1}` so contest compilation pulls the problem body into the contest document.
 
+
+## Compiling a single problem PDF
+
+To build a standalone PDF for a specific problem (e.g. `problems/dummy/problem1.tex`), run:
+
+```bash
+make -C build ../bin/problems/dummy/problem1.pdf
+```
+
+This will:
+- Generate a wrapper `.tex` file for the problem in `build/wrapped/dummy/problem1.tex`.
+- Compile it to PDF, placing the result in `bin/problems/dummy/problem1.pdf`.
+
+You can also use tab completion to find available problem PDFs, or run `make -C build problems` to build all of them.
+
+---
 Per-problem standalone PDF generation
 - The Makefile automatically creates a wrapper (.tex) that:
   - loads `utils/helpers.tex` so problem macros (`\problemTitle`, `\problemStatement`, ...) work,
