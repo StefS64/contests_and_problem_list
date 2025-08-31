@@ -1,0 +1,33 @@
+% Helper macros for including problems
+\newcommand{\includeProblem}[1]{
+    \input{../problems/#1}
+}
+
+% Macro to format problem title
+\newcommand{\problemTitle}[1]{
+    \section*{#1}
+}
+
+% Macro to format problem statement
+\newcommand{\problemStatement}[1]{
+    \textbf{Problem Statement:} #1
+}
+
+% Macro to format constraints
+\newcommand{\constraints}[1]{
+    \textbf{Constraints:} #1
+}
+
+% Macro to format examples
+\newcommand{\example}[2]{
+    \textbf{Example #1:} #2
+}
+
+% Macro to include a problem with its title and statement
+\newcommand{\addProblem}[3]{
+    \problemTitle{#1}
+    \problemStatement{#2}
+    \includeProblem{#3}{}
+}
+
+% End of helpers.tex
