@@ -24,7 +24,7 @@ $(PROBLEMS):
 
 
 # Rule: build the main contest PDF
-$(CONTEST_PDF): $(CONTEST) $(call deps,$(CONTEST))
+%.pdf: ../contests/%.tex  $(call deps,../contests/%.tex)
 	@echo "Dependencies for $(CONTEST):"
 	@echo "$(call deps,$(CONTEST))"
 	@echo "Raw dependencies:"

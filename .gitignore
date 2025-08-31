@@ -1,0 +1,18 @@
+# Ignore build directory (PDF and aux outputs)
+/build/
+build/
+
+# LaTeX intermediate files
+*.aux
+*.log
+*.toc
+*.out
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+
+# Editor / OS files
+.vscode/
+*.swp
+*~
+.DS_Store
