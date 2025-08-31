@@ -1,14 +1,12 @@
 LATEX      = pdflatex
 LATEXFLAGS = -interaction=nonstopmode -halt-on-error -output-directory=../build
 
-# Main contest TeX file
-CONTEST = ../contests/contest1.tex
+# All contest TeX files
+CONTESTS = $(wildcard ../contests/*.tex)
+# PDF targets (placed in ../bin)
+CONTEST_PDFS = $(CONTESTS:../contests/%.tex=../bin/%.pdf)
+
 PROBLEMS =  ../problems/*
-
-
-
-# Output PDF name
-CONTEST_PDF = $(CONTEST:../contests/%.tex=%.pdf)
 
 # Function: extract dependencies (\includeProblem{...})
 define deps
@@ -16,24 +14,32 @@ $(shell grep -o '\\includeProblem{[^}]*}' $1 | \
        sed -E 's/\\includeProblem\{([^}]*)\}/..\/problems\/\1/')
 endef
 
-# Default target
-all: $(CONTEST_PDF)
+# Default target: build all contest PDFs
+all: $(CONTEST_PDFS)
 
 $(PROBLEMS):
 	@echo "Read $@"
 
 
-# Rule: build the main contest PDF
-%.pdf: ../contests  $(call deps,$(CONTEST))
-	@echo "Dependencies for $(CONTEST):"
-	@echo "$(call deps,$(CONTEST))"
+# Generate one rule per contest: ../bin/<name>.pdf depends on the .tex and its included problems
+define make_rule
+$(1): $(2) $(call deps,$(2))
+	@echo "Dependencies for $(2):"
+	@echo "$(call deps,$(2))"
 	@echo "Raw dependencies:"
-	@grep -o '\\includeProblem{[^}]*}' $(CONTEST) | sed -E 's/\\includeProblem\{([^}]*)\}/..\/problems\/\1/'
-	$(LATEX) $(LATEXFLAGS) $<
+	@grep -o '\\includeProblem{[^}]*}' $(2) | sed -E 's/\\includeProblem\{([^}]*)\}/..\/problems\/\1/'
+	@mkdir -p ../build ../bin
+	$(LATEX) $(LATEXFLAGS) $(2)
+	$(LATEX) $(LATEXFLAGS) $(2)
+	@mv -f ../build/$(basename $(notdir $(2))).pdf ../bin/$(basename $(notdir $(2))).pdf
+endef
 
-# Clean up auxiliary files
+$(foreach c,$(CONTESTS),$(eval $(call make_rule,$(c:../contests/%.tex=../bin/%.pdf),$(c))))
+
+# Clean up auxiliary files (aux/log/toc/out in ../build, only PDFs in ../bin)
 clean:
 	rm -f ../build/*.aux ../build/*.log ../build/*.toc ../build/*.out ../build/*.pdf
+	rm -f ../bin/*.pdf
 
 # Phony targets
 .PHONY: all clean

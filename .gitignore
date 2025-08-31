@@ -1,6 +1,8 @@
 # Ignore build directory (PDF and aux outputs)
 /build/
 build/
+/bin/
+bin/
 
 # LaTeX intermediate files
 *.aux
