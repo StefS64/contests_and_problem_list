@@ -14,7 +14,6 @@ This repository is designed for creating and managing programming contests. It o
   - `contest2.tex`: LaTeX source for contest 2.
 
 - **utils/**: Contains utility files for flags and helpers.
-  - `flags.tex`: Defines flags for marking problems as used or unused.
   - `helpers.tex`: Contains helper functions and macros for formatting.
 
 - **build/**: Contains build instructions.
@@ -43,10 +42,6 @@ make
 ```
 
 This will generate PDF files for each contest in the `contests/` directory.
-
-## Usage of Flags
-
-The `flags.tex` file provides macros to mark problems as used or unused. You can include these flags in your problem statements to keep track of which problems have been included in contests.
 
 ## License
 
